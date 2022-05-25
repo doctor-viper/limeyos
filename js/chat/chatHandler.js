@@ -244,6 +244,7 @@ class ChatHandler extends Handler {
         this.commandsInfo[command].forEach(info => {
           if (this.checkPermissions(user, flags, info.permission, info.info) && this.updateCooldown(info)) {
             controller.handleData(info.trigger, {
+              command: command,
               user: user,
               message: combined,
               after: message,
@@ -305,7 +306,7 @@ class ChatHandler extends Handler {
       });
 
       // Check for matching command and user permission
-      var command = message.split(' ')[0];
+      var command = message.split(' ')[0].toLowerCase();
       if(this.commandsOther.indexOf(command) != -1) {
         var args = Parser.splitLine(message);
         var chatArgs = {};
@@ -316,6 +317,7 @@ class ChatHandler extends Handler {
           if (this.checkPermissions(user, flags, info.permission, info.info) && this.updateCooldown(info)) {
             var after = message.split(' ').slice(1).join(' ');
             controller.handleData(info.trigger, {
+              command: command,
               user: user,
               message: message,
               after: after,

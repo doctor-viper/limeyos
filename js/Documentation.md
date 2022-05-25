@@ -10,10 +10,11 @@ Each handler provides its own triggers and actions that can be used in a trigger
   * [Parameters](#parameters)
   * [Aliases](#aliases)
 - [Default Parameters](#default-parameters)
-- [Actions](#actions)
-  * [Triggers](#actions-triggers)
+- [Action](#action)
+  * [Triggers](#action-triggers)
     + [OnAction](#onaction)
-  * [Actions](#actions-actions)
+  * [Actions](#action-actions)
+    + [Action](#action-1)
 - [API](#api)
   * [Triggers](#api-triggers)
   * [Actions](#api-actions)
@@ -41,6 +42,15 @@ Each handler provides its own triggers and actions that can be used in a trigger
   * [Actions](#chat-actions)
     + [Chat Send](#chat-send)
     + [Chat Whisper](#chat-whisper)
+- [Cooldown](#cooldown)
+  * [Triggers](#cooldown-triggers)
+  * [Actions](#cooldown-actions)
+    + [Cooldown Apply](#cooldown-apply)
+    + [Cooldown Check](#cooldown-check)
+    + [Cooldown Clear](#cooldown-clear)
+    + [Cooldown Global Apply](#cooldown-global-apply)
+    + [Cooldown Global Check](#cooldown-global-check)
+    + [Cooldown Global Clear](#cooldown-global-clear)
 - [Debug](#debug)
   * [Triggers](#debug-triggers)
   * [Actions](#debug-actions)
@@ -49,7 +59,7 @@ Each handler provides its own triggers and actions that can be used in a trigger
     + [Debug Parser](#debug-parser)
     + [Debug SLOBS](#debug-slobs)
     + [Debug StreamElements](#debug-streamelements)
-    + [Debug StreamLabs](#debug-streamLabs)
+    + [Debug StreamLabs](#debug-streamlabs)
     + [Debug Twitch](#debug-twitch)
 - [Discord](#discord)
   * [Triggers](#discord-triggers)
@@ -103,12 +113,11 @@ Each handler provides its own triggers and actions that can be used in a trigger
     + [OnInit](#oninit)
   * [Actions](#miscellaneous-actions)
     + [AsyncFunction](#asyncfunction)
-    + [Cooldown Apply](#cooldown-apply)
-    + [Cooldown Check](#cooldown-check)
     + [Delay](#delay)
     + [Error](#error)
     + [Exit](#exit)
     + [Function](#function)
+    + [Globals](#globals)
     + [If](#if)
     + [Log](#log)
     + [Loop](#loop)
@@ -120,6 +129,7 @@ Each handler provides its own triggers and actions that can be used in a trigger
   * [Triggers](#obs-triggers)
     + [OnOBSCustomMessage](#onobscustommessage)
     + [OnOBSSourceVisibility](#onobssourcevisibility)
+    + [OnOBSSourceFilterVisibility](#onobssourcefiltervisibility)
     + [OnOBSStreamStarted](#onobsstreamstarted)
     + [OnOBSStreamStopped](#onobsstreamstopped)
     + [OnOBSSwitchScenes](#onobsswitchscenes)
@@ -129,6 +139,12 @@ Each handler provides its own triggers and actions that can be used in a trigger
     + [OBS CurrentScene](#obs-currentscene)
     + [OBS IsSceneSourceVisible](#obs-isscenesourcevisible)
     + [OBS IsSourceActive](#obs-issourceactive)
+    + [OBS Media Duration](#obs-media-duration)
+    + [OBS Media Path](#obs-media-path)
+    + [OBS Media Pause](#obs-media-pause)
+    + [OBS Media Play](#obs-media-play)
+    + [OBS Media Restart](#obs-media-restart)
+    + [OBS Media Stop](#obs-media-stop)
     + [OBS Mute](#obs-mute)
     + [OBS Position](#obs-position)
     + [OBS Refresh](#obs-refresh)
@@ -146,9 +162,10 @@ Each handler provides its own triggers and actions that can be used in a trigger
     + [OBS StopReplayBuffer](#obs-stopreplaybuffer)
     + [OBS StopStream](#obs-stopstream)
     + [OBS TakeSourceScreenshot](#obs-takesourcescreenshot)
+    + [OBS Transition](#obs-transition)
     + [OBS Version](#obs-version)
     + [OBS Volume](#obs-volume)
-- [Param](#Param)
+- [Param](#param)
   * [Triggers](#param-triggers)
   * [Actions](#param-actions)
     + [Param Add](#param-add)
@@ -192,7 +209,6 @@ Each handler provides its own triggers and actions that can be used in a trigger
 - [StreamElements](#streamelements)
   * [Triggers](#streamelements-triggers)
     + [OnSETwitchBits](#onsetwitchbits)
-    + [OnSETwitchBulkGiftSub](#onsetwitchbulkgiftsub)
     + [OnSEDonation](#onsedonation)
     + [OnSETwitchFollow](#onsetwitchfollow)
     + [OnSETwitchGiftSub](#onsetwitchgiftsub)
@@ -217,6 +233,8 @@ Each handler provides its own triggers and actions that can be used in a trigger
   * [Triggers](#text-to-speech-triggers)
   * [Actions](#text-to-speech-actions)
     + [TTS](#tts)
+    + [TTS Stop](#tts-stop)
+    + [TTS Voices](#tts-voices)
 - [Timer](#timer)
   * [Triggers](#timer-triggers)
     + [OnTimer](#ontimer)
@@ -329,6 +347,7 @@ OnCommand mbv 0 !so !sh !caster !shout
 Chat Send "Go check out {after} at twitch.tv/{after}"
 ```
 The commands, `!so`, `!sh`, `!caster`, and `!shout` will all cause the message to be sent, regardless of which one is used. This allows you to easily set up _aliases_ for triggers. The following triggers now support aliases:
+- OnAction
 - OnCommand
 - OnKeyword
 - OnMessage
@@ -355,27 +374,37 @@ The following parameters are always available. Use the `_successful_` and `_unsu
 
 ***
 
-## Actions
+## Action
 Enables the ability to create your own actions within Kruiz Control.
 
-### Actions Triggers
+### Action Triggers
 
 #### OnAction
 | | |
 ------------ | -------------
 **Info** | Used to define a list of actions that will get inserted into an event when the provided `<action>` is called.
 **Format** | `OnAction <action>`
+**Format w/ Aliases** | `OnAction <action1> <action2> ...`
 **Example** | `OnAction ReadFile`
+**Example w/ Aliases** | `OnAction ReadFile rf`
 
 ##### Parameters
 | | |
 ------------ | -------------
+**action** | The `<action>` performed that triggered this event.
 **in#** | The numbered arguments passed to the action. Replace `#` with a number, starting at 1 and ending at the last argument passed into the command.
 
 ***
 
-### Actions Actions
-None at the moment.
+### Action Actions
+
+#### Action
+| | |
+------------ | -------------
+**Info** | Used to run an action by passing it through. This allows actions to be fired dynamically within an event. `<action>` is the full action that you want to complete. The action can be provided as a single argument (inside of quotes) or written out normally.
+**Format** | `Action <action>`
+**Example** | `Action Chat Send "Hello world"`
+**Example w/ single argument** | `Action "Chat Send 'Hello world'"`
 
 ***
 
@@ -599,6 +628,7 @@ _WARNING: Kruiz Control responds to messages sent by Kruiz Control. Please be mi
 ##### Parameters
 | | |
 ------------ | -------------
+**command** | The command that triggered the event.
 **user** | The display name of the user that sent the command.
 **after** | The message excluding the command.
 **message** | The entire chat message, including the command.
@@ -663,7 +693,7 @@ _WARNING: Kruiz Control responds to messages sent by Kruiz Control. Please be mi
 
 ***
 
-### Actions
+### Chat Actions
 
 #### Chat Send
 | | |
@@ -680,6 +710,88 @@ _WARNING: Kruiz Control responds to messages sent by Kruiz Control. Please be mi
 **Info** | Used to send a whisper to a user.
 **Format** | `Chat Whisper <user> <message>`
 **Example** | `Chat Whisper Kruiser8 "Chicken Dinner"`
+
+***
+
+## Cooldown
+Adds the ability to give events a cooldown so that they cannot be repeated within a period of time.
+
+### Cooldown Triggers
+None at the moment.
+
+***
+
+### Cooldown Actions
+
+#### Cooldown Apply
+| | |
+------------ | -------------
+**Info** | Used to apply a cooldown to triggers. `<name>` is the identifier for the cooldown. `<seconds>` is the number of seconds before the trigger can fire again.
+**Format** | `Cooldown Apply <name> <seconds>`
+**Example** | `Cooldown Apply MyCustomTrigger 30`
+
+***
+
+#### Cooldown Check
+| | |
+------------ | -------------
+**Info** | Used to check if a cooldown is active. `<name>` is the identifier for the cooldown.
+**Format** | `Cooldown Check <name>`
+**Example** | `Cooldown Check MyCustomTrigger`
+
+##### Parameters
+| | |
+------------ | -------------
+**\<name\>** | [True/False] Whether or not the cooldown is active where **\<name\>** is the name of the cooldown.
+**cooldown** | The number of seconds (rounded to a whole number) left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
+**cooldown_real** | The decimal number of seconds left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
+
+_Note: The above example, `Cooldown Check MyCustomTrigger`, would return the parameter **MyCustomTrigger**._
+
+***
+
+#### Cooldown Clear
+| | |
+------------ | -------------
+**Info** | Used to clear (remove) an existing cooldown. `<name>` is the identifier for the cooldown.
+**Format** | `Cooldown Clear <name>`
+**Example** | `Cooldown Clear MyCustomTrigger`
+
+***
+
+#### Cooldown Global Apply
+| | |
+------------ | -------------
+**Info** | Used to apply a global cooldown to triggers. Global cooldowns persist between sessions (i.e. the cooldown remains after a reset). `<name>` is the identifier for the cooldown. `<seconds>` is the number of seconds before the trigger can fire again.
+**Format** | `Cooldown Global Apply <name> <seconds>`
+**Example** | `Cooldown Global Apply MyCustomTrigger 30`
+
+***
+
+#### Cooldown Global Check
+| | |
+------------ | -------------
+**Info** | Used to check if a global cooldown is active. Global cooldowns persist between sessions (i.e. the cooldown remains after a reset). `<name>` is the identifier for the cooldown.
+**Format** | `Cooldown Global Check <name>`
+**Example** | `Cooldown Global Check MyCustomTrigger`
+
+##### Parameters
+| | |
+------------ | -------------
+**\<name\>** | [True/False] Whether or not the cooldown is active where **\<name\>** is the name of the cooldown.
+**cooldown** | The number of seconds (rounded to a whole number) left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
+**cooldown_real** | The decimal number of seconds left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
+
+_Note: The above example, `Cooldown Global Check MyCustomTrigger`, would return the parameter **MyCustomTrigger**._
+
+***
+
+#### Cooldown Global Clear
+| | |
+------------ | -------------
+**Info** | Used to clear (remove) an existing global cooldown. Global cooldowns persist between sessions (i.e. the cooldown remains after a reset). `<name>` is the identifier for the cooldown.
+**Format** | `Cooldown Global Clear <name>`
+**Example** | `Cooldown Global Clear MyCustomTrigger`
 
 ***
 
@@ -828,9 +940,8 @@ None at the moment.
 #### Discord File
 | | |
 ------------ | -------------
-**Info** | Used to upload a file attachment with a discord message. `<name>` is the id that was used to register the webhook in a [`Discord Create`](#discord-create). `<file>` is the absolute (full) or relative path to a file to upload. Relative paths start at the Kruiz Control root directory.
+**Info** | Used to upload a file attachment with a discord message. `<name>` is the id that was used to register the webhook in a [`Discord Create`](#discord-create). `<file>` is the relative path to a file to upload. Relative paths start at the Kruiz Control root directory.
 **Format** | `Discord File <name> <file>`
-**Example w/ absolute path** | `Discord File "GeneralChannel" "C:\Users\YOUR_USER_NAME\Documents\Stream\screenshot.png"`
 **Example w/ relative path** | `Discord File "GeneralChannel" "screenshots/screenshot.png"`
 
 ***
@@ -1265,33 +1376,6 @@ A small selection of actions that are included for increased usability.
 
 ***
 
-#### Cooldown Apply
-| | |
------------- | -------------
-**Info** | Used to apply a cooldown to triggers. `<name>` is the identifier for the cooldown. `<seconds>` is the number of seconds before the trigger can fire again.
-**Format** | `Cooldown Apply <name> <seconds>`
-**Example** | `Cooldown Apply MyCustomTrigger 30`
-
-***
-
-#### Cooldown Check
-| | |
------------- | -------------
-**Info** | Used to check if a cooldown is active. `<name>` is the identifier for the cooldown.
-**Format** | `Cooldown Check <name>`
-**Example** | `Cooldown Check MyCustomTrigger`
-
-##### Parameters
-| | |
------------- | -------------
-**\<name\>** | [True/False] Whether or not the cooldown is active where **\<name\>** is the name of the cooldown.
-**cooldown** | The number of seconds (rounded to a whole number) left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
-**cooldown_real** | The decimal number of seconds left on the cooldown. This is only returned if the cooldown is active (`<name>` is True).
-
-_Note: The above example, `Cooldown Check MyCustomTrigger`, would return the parameter **MyCustomTrigger**._
-
-***
-
 #### Delay
 | | |
 ------------ | -------------
@@ -1336,6 +1420,61 @@ Function 'var arr = [api_data]; return {random: arr[Math.floor(Math.random() * a
 If a `continue` parameter is returned and the value is `false`, the trigger will exit and not continue processing actions.
 
 If an `actions` array parameter is returned, each item of the array will be inserted into the event and processed.
+
+***
+
+#### Globals
+Use this to determine all global variables in Kruiz Control.
+| | |
+------------ | -------------
+**Info** | Used to create a list of all current global variable names. `<name>` is the name of the [`List`](#List) to create.
+**Format** | `Globals <name>`
+**Example** | `Globals MyGlobals`
+
+<table>
+<tr>
+<td>Example Usage: Sends all global variable names chat</td>
+</tr>
+<tr>
+<td>
+
+```m
+OnInit
+Globals MyGlobals
+List Count MyGlobals
+Loop 2 {count}
+List Remove MyGlobals
+Chat Send {value}
+```
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td>Example Usage: Sends all global variable names and values to an example API</td>
+</tr>
+<tr>
+<td>
+
+```m
+OnInit
+Globals MyGlobals
+List Count MyGlobals
+Loop 7 {count}
+List Remove MyGlobals
+Variable Global Load {value}
+API Method GlobalVariable Post
+API Url GlobalVariable "http://localhost/api/variable"
+API Data GlobalVariable name {value}
+API Data GlobalVariable value [{value}]
+API Send GlobalVariable
+```
+
+</td>
+</tr>
+</table>
 
 ***
 
@@ -1435,6 +1574,20 @@ Enables the ability to interact with and respond to OBS.
 ------------ | -------------
 **message** | The name of the custom message.
 **data** | The data included with the message (or an empty string).
+
+***
+
+#### OnOBSSourceFilterVisibility
+| | |
+------------ | -------------
+**Info** | Used to trigger a set of actions when a source filter's visibility is changed.
+**Format** | `OnOBSSourceFilterVisibility <source> <filter> <on/off/toggle>`
+**Example** | `OnOBSSourceFilterVisibility Webcam Rainbow on`
+
+##### Parameters
+| | |
+------------ | -------------
+**visible** | The current visibility setting.
 
 ***
 
@@ -1553,6 +1706,65 @@ Enables the ability to interact with and respond to OBS.
 | | |
 ------------ | -------------
 **is_active** | [true/false] `true` if the source is active. Otherwise, `false`.
+
+***
+
+#### OBS Media Duration
+| | |
+------------ | -------------
+**Info** | Used to retrieve the duration of a media source. `<source>` is the name of the source.
+**Format** | `OBS Media Duration <source>`
+**Example** | `OBS Media Duration AlertVideo`
+
+##### Parameters
+| | |
+------------ | -------------
+**duration** | The duration of the file in seconds.
+
+***
+
+#### OBS Media Path
+| | |
+------------ | -------------
+**Info** | Used to set the file path of a media source. `<source>` is the name of the source. `<path>` is the absolute path to the file.
+**Format** | `OBS Media Path <source> <path>`
+**Example** | `OBS Media Path AlertVideo "C:/Users/YOUR_USER_NAME/Stream/alert.webm"`
+
+***
+
+#### OBS Media Pause
+| | |
+------------ | -------------
+**Info** | Used to pause a media source. `<source>` is the name of the source.
+**Format** | `OBS Media Pause <source>`
+**Example** | `OBS Media Pause AlertVideo`
+
+***
+
+#### OBS Media Play
+| | |
+------------ | -------------
+**Info** | Used to play a media source. `<source>` is the name of the source.
+**Format** | `OBS Media Play <source>`
+**Example** | `OBS Media Play AlertVideo`
+
+***
+
+#### OBS Media Restart
+| | |
+------------ | -------------
+**Info** | Used to restart a media source. `<source>` is the name of the source.
+**Format** | `OBS Media Restart <source>`
+**Example** | `OBS Media Restart AlertVideo`
+
+***
+
+#### OBS Media Stop
+| | |
+------------ | -------------
+**Info** | Used to stop a media source. `<source>` is the name of the source.
+**Format** | `OBS Media Stop <source>`
+**Example** | `OBS Media Stop AlertVideo`
 
 ***
 
@@ -1734,6 +1946,20 @@ _Note: The browser source does not need to be in current/active scene for this t
 **Info** | Used to take a screenshot of an OBS source and save it to a file. `<file>` is the absolute path to a file.
 **Format** | `OBS TakeSourceScreenshot <source> <file>`
 **Example** | `OBS TakeSourceScreenshot Webcam "C:\Users\YOUR_USER_NAME\Documents\Stream\screenshot.png"`
+
+***
+
+#### OBS Transition
+| | |
+------------ | -------------
+**Info** | Used to change the scene transition. `<transition>` is the name of the scene transition that you want active.
+**Format** | `OBS Transition <transition>`
+**Example** | `OBS Transition Fade`
+
+##### Parameters
+| | |
+------------ | -------------
+**previous_transition** | The name of the transition prior to changing it.
 
 ***
 
@@ -2191,13 +2417,6 @@ Enables the ability to trigger actions based on StreamElement alerts. Note that 
 
 ***
 
-#### OnSETwitchBulkGiftSub
-| | |
------------- | -------------
-**Info** | Used to trigger actions when someone gifts multiple subscriptions to the community.
-**Format** | `OnSETwitchBulkGiftSub`
-**Example** | `OnSETwitchBulkGiftSub`
-
 ##### Parameters
 | | |
 ------------ | -------------
@@ -2501,7 +2720,7 @@ None at the moment.
 ***
 
 ## Text-To-Speech
-Enables the ability to have input voiced with custom voices. This is powered by [responsivevoice.org](https://responsivevoice.org).
+Enables the ability to have input voiced with custom voices. This is powered by the text-to-speech (narration/speech) component on your computer.
 
 ### Text-To-Speech Triggers
 
@@ -2526,6 +2745,36 @@ None at the moment.
 **Info** | Used to stop playing text-to-speech audio.
 **Format** | `TTS Stop`
 **Example** | `TTS Stop`
+
+***
+
+#### TTS Voices
+Use this to determine the available voices on your computer.
+| | |
+------------ | -------------
+**Info** | Used to create a list of all available voices for text-to-speech based on what is installed on your computer. `<name>` is the name of the [`List`](#List) to create.
+**Format** | `TTS Voices <name>`
+**Example** | `TTS Voices MyVoices`
+
+<table>
+<tr>
+<td>Example Usage: Sends all voice options to chat</td>
+</tr>
+<tr>
+<td>
+
+```m
+OnInit
+TTS Voices MyVoices
+List Count MyVoices
+Loop 2 {count}
+List Remove MyVoices
+Chat Send {value}
+```
+
+</td>
+</tr>
+</table>
 
 ***
 

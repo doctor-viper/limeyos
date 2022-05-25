@@ -9,8 +9,9 @@
 * @param {function} onStreamStop handle stream stop messages
 * @param {function} onCustomMessage handle custom messages
 * @param {function} onOBSSourceVisibility handle scene item visibility changes
+* @param {function} onOBSSourceFilterVisibility handle source filter visibility changes
 */
-function connectOBSWebsocket(address, password, obsHandler, onSwitchScenes, onTransitionBegin, onStreamStarted, onStreamStopped, onCustomMessage, onOBSSourceVisibility) {
+function connectOBSWebsocket(address, password, obsHandler, onSwitchScenes, onTransitionBegin, onStreamStarted, onStreamStopped, onCustomMessage, onOBSSourceVisibility, onOBSSourceFilterVisibility) {
   var obs = new OBSWebSocket();
   obs.connect({ address: address, password: password }).then(() => {
     obsHandler.success();
@@ -40,6 +41,7 @@ function connectOBSWebsocket(address, password, obsHandler, onSwitchScenes, onTr
   obs.on('StreamStopped', onStreamStopped);
   obs.on('BroadcastCustomMessage', onCustomMessage);
   obs.on('SceneItemVisibilityChanged', onOBSSourceVisibility);
+  obs.on('SourceFilterVisibilityChanged', onOBSSourceFilterVisibility);
 
   obs.getCurrentScene = async function() {
     return await this.send('GetCurrentScene')
@@ -169,6 +171,64 @@ function connectOBSWebsocket(address, password, obsHandler, onSwitchScenes, onTr
     await this.send('TakeSourceScreenshot', {
       sourceName: source,
       saveToFilePath: filePath
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.playPauseMedia = async function(sourceName, playPause) {
+    await this.send('PlayPauseMedia', {
+      'sourceName': sourceName,
+      'playPause': playPause
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.restartMedia = async function(sourceName) {
+    await this.send('RestartMedia', {
+      'sourceName': sourceName
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.stopMedia = async function(sourceName) {
+    await this.send('StopMedia', {
+      'sourceName': sourceName
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.getMediaDuration = async function(sourceName) {
+    return await this.send('GetMediaDuration', {
+      'sourceName': sourceName
+    }).then(data => {
+      return data;
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  /**
+   * Set the path of a media source.
+   * @param {string} source
+   * @param {string} path
+   * @return {Promise<void>}
+   */
+  obs.setMediaSourcePath = async function(source, path) {
+    await this.send('SetSourceSettings', {
+      'sourceName': source,
+      'sourceType': 'ffmpeg_source',
+      'sourceSettings': {
+        'local_file': path
+      }
     }).catch(err => {
       // Promise convention dictates you have a catch on every chain.
       console.error(JSON.stringify(err));
@@ -314,6 +374,25 @@ function connectOBSWebsocket(address, password, obsHandler, onSwitchScenes, onTr
         'y': scaleY
 	     }
     }).catch(err => { // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.getCurrentTransition = async function() {
+    return await this.send('GetCurrentTransition')
+    .then(data => {
+      return data;
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
+      console.error(JSON.stringify(err));
+    });
+  };
+
+  obs.setCurrentTransition = async function(transition) {
+    await this.send('SetCurrentTransition', {
+      'transition-name': transition
+    }).catch(err => {
+      // Promise convention dictates you have a catch on every chain.
       console.error(JSON.stringify(err));
     });
   };

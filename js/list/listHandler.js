@@ -24,7 +24,6 @@ class ListHandler extends Handler {
    */
   async postParse() {
     this.global_lists = await IDBService.get(this.GLOBAL_LIST_KEY) || [];
-    const resp = await IDBService.get(this.GLOBAL_LIST_KEY);
     for (const list_id of this.global_lists) {
       this.lists[list_id] = await IDBService.get(`${this.GLOBAL_LIST_KEY_PREFIX}${list_id}`) || [];
     };
@@ -57,6 +56,9 @@ class ListHandler extends Handler {
         var { name } = Parser.getInputs(triggerData, ['action', 'name']);
         this.initialize(name);
         this.lists[name] = [];
+        if (this.global_lists.indexOf(name) !== -1) {
+          IDBService.set(`${this.GLOBAL_LIST_KEY_PREFIX}${name}`, this.lists[name])
+        }
         break;
       case 'export':
         var { name } = Parser.getInputs(triggerData, ['action', 'name']);
@@ -88,6 +90,9 @@ class ListHandler extends Handler {
         var { name, values } = Parser.getInputs(triggerData, ['action', 'name', 'values']);
         this.initialize(name);
         this.lists[name] = JSON.parse(values);
+        if (this.global_lists.indexOf(name) !== -1) {
+          IDBService.set(`${this.GLOBAL_LIST_KEY_PREFIX}${name}`, this.lists[name])
+        }
         break;
       case 'index':
         var { name, value } = Parser.getInputs(triggerData, ['action', 'name', 'value']);
@@ -229,6 +234,18 @@ class ListHandler extends Handler {
       }
     }
     return response;
+  }
+
+  /**
+   * Create a named list from the provided items.
+   * @param {string} name of the list
+   * @param {array} items to add to the named list
+   */
+  createList(name, items) {
+    this.initialize(name);
+    items.forEach(item => {
+      this.add(name, item);
+    });
   }
 }
 
