@@ -1,0 +1,9 @@
+# Lists
+emotes/emotes.txt
+greetings/greetings.txt
+
+# VIPS
+vips/vips.txt
+
+# Twitch Actions
+twitch_actions/auto_shoutout.txt

@@ -1,0 +1,23 @@
+OnSpeak *
+# ARE THEY A VIP
+Function "var data = [data]; var lowerName = data.user.toLowerCase(); return { lowerUsername: lowerName };"
+List Contains Vips "{lowerUsername}"
+Variable Set isLimeyVIP {contains}
+# ARE THEY A SUBSCRIBER?
+Function "var data = [data]; var subscriberStatus = data.flags.subscriber ? data.flags.subscriber : false; return { isSubscriber: subscriberStatus };"
+# ARE THEY A CHANNEL VIP?
+Function "var data = [data]; var vipStatus = data.flags.vip ? data.flags.vip : false; return { isVIP: vipStatus };"
+# ARE THEY A MOD?
+Function "var data = [data]; var modStatus = data.flags.mod ? data.flags.mod : false; return { isMod: modStatus };"
+Function "return { continue: ( ('{lowerUsername}' != 'limeyos') && ('{lowerUsername}' != 'unclelimey') && ('{lowerUsername}' != 'streamelements') ) && ( {isVIP} || {isSubscriber} || {isLimeyVIP} || {isMod} ) };"
+Play 100 nowait hello-there.mp3
+API GET https://decapi.me/twitch/game/{user}
+List Get Greetings
+Variable Set greeting {value}
+List Get Emotes
+Variable Set emote {value}
+If 1 {isMod} = true
+  Chat Send "unclel19Limeslice MOD ALERT @{user} unclel19Limeslice"
+Chat Send "Hey {greeting} {emote}. https://twitch.tv/{user}"
+If 1 {api_data} != ""
+  Chat Send "Last seen playing {api_data} unclel19Legend"
