@@ -5,7 +5,7 @@ List Add osResponses "I asked what I should bring to the party. The hosts said â
 List Add osResponses "I'm off to do something more interesting.... like ANYTHING ELSE !!!!!"
 List Add osResponses "Taking a nap, I'll be back later"
 List Add osResponses "That's my name, get your own"
-
+List Add osResponses "What now? I was asleep!!!"
 
 OnCommand e 0 !limeyos
 List Get osResponses
