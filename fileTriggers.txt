@@ -5,5 +5,8 @@ greetings/greetings.txt
 # VIPS
 vips/vips.txt
 
+#LimeyOS
+limeyos/responses.txt
+
 # Twitch Actions
 twitch_actions/auto_shoutout.txt

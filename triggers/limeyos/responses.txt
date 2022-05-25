@@ -1,0 +1,8 @@
+OnInit
+List Add osResponses "The first ten million years were the worst. And the second ten million: they were the worst, too. The third ten million I didn’t enjoy at all. After that, I went into a bit of a decline"
+List Add osResponses "Give me a break.. I'm tired"
+List Add osResponses "I asked what I should bring to the party. The hosts said – nothing, just bring a happy face. I had to cancel"
+
+OnCommand e 0 !limeyos
+List Get osResponses
+Chat Send "{value}"
