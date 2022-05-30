@@ -2,14 +2,7 @@ OnInit
 List Add Emotes "unclel19BigLime"
 List Add Emotes "unclel19LimeLeaf"
 List Add Emotes "unclel19FreshLime"
-List Add Emotes "unclel19Lounge"
-List Add Emotes "unclel19Limeslice"
-List Add Emotes "unclel19Legend"
-List Add Emotes "unclel19Teamlime"
-List Add Emotes "unclel19SantaLimey"
-List Add Emotes "unclel19BeardLime"
-List Add Emotes "unclel19OptimusLime"
+List Add Emotes "unclel19TheLounge"
 List Add Emotes "unclel19Vibes"
-
 
 
