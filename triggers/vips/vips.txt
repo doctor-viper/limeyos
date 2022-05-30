@@ -68,7 +68,9 @@ List Add Vips "The_Fart_Squirrel"
 List Add Vips "Madrush35"
 List Add Vips "A_RandomFatGuy"
 List Add Vips "Nutty_NutterButter"
-
+List Add Vips "Yoshino_Tommoya"
+List Add Vips "Lukacres"
+List Add Vips "thelaw_124"
 
 
 
