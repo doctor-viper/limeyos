@@ -20,7 +20,7 @@ Variable Set greeting {value}
 List Get Emotes
 Variable Set emote {value}
 If 1 {isMod} = true
-  Chat Send "unclel19Limeslice MOD ALERT @{user} unclel19Limeslice"
+  Chat Send "unclel19BigLime MOD ALERT @{user} unclel19BigLime"
 Chat Send "Hey {greeting} {emote}. https://twitch.tv/{user}"
 If 1 {api_data} != ""
-  Chat Send "Last seen playing {api_data} unclel19Legend"
+  Chat Send "Last seen playing {api_data} unclel19BigLime"
