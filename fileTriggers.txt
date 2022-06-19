@@ -1,4 +1,5 @@
 # Lists
+custom_shout/custom_shout.txt
 emotes/emotes.txt
 greetings/greetings.txt
 

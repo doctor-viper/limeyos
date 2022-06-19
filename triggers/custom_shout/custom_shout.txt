@@ -1,0 +1,5 @@
+OnInit
+List Add CustomShout "fantasynr1"
+List Add CustomShout "shoebaccasaurus"
+List Add CustomShout "joeyscary"
+List Add CustomShout "dr_viper"
