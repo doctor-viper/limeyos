@@ -20,6 +20,8 @@ If 8 {contains} = true
     Play 75 nowait joey.mp3
   If 1 {lowerUsername} = "dr_viper"
     Play 60 nowait doctor.mp3
+  If 1 {lowerUsername} = "darlingjuicypear"
+    Play 60 nowait Juicy.mp3
 If 1 {contains} != true
   Play 100 nowait hello-there.mp3
 API GET https://decapi.me/twitch/game/{user}
