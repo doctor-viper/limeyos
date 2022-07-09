@@ -47,4 +47,5 @@ List Add Greetings "SexyLemon"
 List Add Greetings "LimeSquirt"
 List Add Greetings "LemonSquirt"
 List Add Greetings "JuicyLime"
+List Add Greetings "Lounger"
 
