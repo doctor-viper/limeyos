@@ -108,6 +108,3 @@ List Add Vips "Stonie_uk"
 List Add Vips "gentleAPE"
 List Add Vips "Crymsun79"
 List Add Vips "ROG3RBOT"
-
-
-

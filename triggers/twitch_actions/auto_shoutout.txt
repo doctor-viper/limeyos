@@ -11,7 +11,7 @@ Function "var data = [data]; var vipStatus = data.flags.vip ? data.flags.vip : f
 Function "var data = [data]; var modStatus = data.flags.mod ? data.flags.mod : false; return { isMod: modStatus };"
 Function "return { continue: ( ('{lowerUsername}' != 'limeyos') && ('{lowerUsername}' != 'unclelimey') && ('{lowerUsername}' != 'streamelements') ) && ( {isVIP} || {isSubscriber} || {isLimeyVIP} || {isMod} ) };"
 List Contains CustomShout "{lowerUsername}"
-If 16 {contains} = true
+If 20 {contains} = true
   If 1 {lowerUsername} = "fantasynr1"
     Play 100 nowait wut-is-happening.mp3
   If 1 {lowerUsername} = "shoebaccasaurus"
@@ -19,7 +19,7 @@ If 16 {contains} = true
   If 1 {lowerUsername} = "joeyscary"
     Play 75 nowait joey.mp3
   If 1 {lowerUsername} = "dr_viper"
-    Play 50 nowait wrong_place_wrong_time.mp3
+    Play 35 nowait doctor.mp3
   If 1 {lowerUsername} = "darlingjuicypear"
     Play 60 nowait Juicy.mp3
   If 1 {lowerUsername} = "dark1corp"
@@ -28,6 +28,10 @@ If 16 {contains} = true
     Play 60 nowait axe.mp3
   If 1 {lowerUsername} = "duckfart750"
     Play 75 nowait quack.mp3
+  If 1 {lowerUsername} = "elcomesoft"
+    Play 75 nowait elcome.mp3
+  If 1 {lowerUsername} = "agoldstandard"
+    Play 75 nowait gold.mp3
 If 1 {contains} != true
   Play 100 nowait hello-there.mp3
 API GET https://decapi.me/twitch/game/{user}
