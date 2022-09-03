@@ -34,6 +34,8 @@ If 22 {contains} = true
     Play 75 nowait gold.mp3
   If 1 {lowerUsername} = "rog3rbot"
     Play 75 nowait roger.mp3
+  If 1 {lowerUsername} = "jollyjola"
+    Play 75 nowait jolly.mp3
 If 1 {contains} != true
   Play 100 nowait hello-there.mp3
 API GET https://decapi.me/twitch/game/{user}
