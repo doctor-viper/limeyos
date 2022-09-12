@@ -11,7 +11,7 @@ Function "var data = [data]; var vipStatus = data.flags.vip ? data.flags.vip : f
 Function "var data = [data]; var modStatus = data.flags.mod ? data.flags.mod : false; return { isMod: modStatus };"
 Function "return { continue: ( ('{lowerUsername}' != 'limeyos') && ('{lowerUsername}' != 'unclelimey') && ('{lowerUsername}' != 'streamelements') ) && ( {isVIP} || {isSubscriber} || {isLimeyVIP} || {isMod} ) };"
 List Contains CustomShout "{lowerUsername}"
-If 22 {contains} = true
+If 28 {contains} = true
   If 1 {lowerUsername} = "fantasynr1"
     Play 100 nowait wut-is-happening.mp3
   If 1 {lowerUsername} = "shoebaccasaurus"
@@ -38,7 +38,7 @@ If 22 {contains} = true
     Play 75 nowait jolly.mp3
   If 1 {lowerUsername} = "samurai_genetics"
     Play 75 nowait samurai.mp3
-  If 1 {lowerUsername} = "xx_IceQueen_xx"
+  If 1 {lowerUsername} = "xx_icequeen_xx"
     Play 75 nowait snowman.mp3
 If 1 {contains} != true
   Play 100 nowait hello-there.mp3
